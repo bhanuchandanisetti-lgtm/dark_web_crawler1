@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dark Web Monitoring Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f1115;
+            color: #eaeaea;
+            margin: 20px;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #2a2d34;
+            text-align: left;
+        }
+        th {
+            background: #1c1f26;
+            color: #ffffff;
+        }
+        tr:hover {
+            background: #1a1d23;
+        }
+        input, button {
+            padding: 7px;
+            margin: 4px;
+            background: #1c1f26;
+            color: #eaeaea;
+            border: 1px solid #333;
+        }
+        button {
+            cursor: pointer;
+        }
+        .risk-LOW { color: #7fd37f; }
+        .risk-MEDIUM { color: #f0c674; }
+        .risk-HIGH { color: #f78c6c; }
+        .risk-CRITICAL { color: #ff5370; font-weight: bold; }
+        .summary-box {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #2a2d34;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h2>🕵️ Dark Web Monitoring System</h2>
+
+<form method="POST" action="/run">
+    <input type="text" name="org" placeholder="Target domain (e.g. example.com)" required>
+    <button type="submit">🚀 Start Monitoring</button>
+</form>
+
+<form method="POST" action="/stop">
+    <button type="submit">⛔ Stop Crawl</button>
+</form>
+
+<hr>
+
+<h3>📊 Overview</h3>
+{% for t, c in summary_by_type %}
+    <div class="summary-box">
+        <strong>{{ t }}</strong>: {{ c }}
+    </div>
+{% endfor %}
+
+<hr>
+
+<h3>📋 Findings</h3>
+
+<table>
+<tr>
+    <th>Detected At</th>
+    <th>Source URL</th>
+    <th>Finding Type</th>
+    <th>Value</th>
+    <th>Severity</th>
+    <th>Threat Score</th>
+    <th>Risk Level</th>
+</tr>
+
+{% for f in findings %}
+<tr>
+    <td>{{ f.detected_at }}</td>
+    <td style="max-width:280px; word-break:break-all;">{{ f.source_url }}</td>
+    <td>{{ f.finding_type }}</td>
+    <td style="max-width:250px; word-break:break-word;">{{ f.value }}</td>
+    <td>{{ f.severity }}</td>
+    <td>{{ f.threat_score }}</td>
+    <td class="risk-{{ f.risk_level }}">{{ f.risk_level }}</td>
+</tr>
+{% endfor %}
+</table>
+
+</body>
+</html>
+

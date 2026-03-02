@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Crawl</title>
+    <style>
+        body { background:#111; color:#0f0; font-family: monospace; }
+        #log { white-space: pre-wrap; }
+        button { margin:10px; padding:8px; }
+    </style>
+</head>
+<body>
+
+<h2>🕷️ Live Dark Web Crawl</h2>
+
+<button onclick="location.href='/'">🏠 Home</button>
+
+<form method="post" action="/stop">
+    <button type="submit">🛑 Stop Crawl</button>
+</form>
+
+<hr>
+
+<div id="log"></div>
+
+<script>
+const logDiv = document.getElementById("log");
+const source = new EventSource("/stream");
+
+source.onmessage = function(event) {
+    logDiv.innerHTML += event.data + "\n";
+    window.scrollTo(0, document.body.scrollHeight);
+};
+</script>
+
+</body>
+</html>
+
